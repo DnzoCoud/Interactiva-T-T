@@ -12,11 +12,6 @@ class CustomUserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, cedula, password=None, **extra_fields):
-        extra_fields.setdefault("is_staff", True)
-        extra_fields.setdefault("is_superuser", True)
-        return self.create_user(cedula, password, **extra_fields)
-
 
 class User(AbstractBaseUser):
     cedula = models.CharField(max_length=20, unique=True)
