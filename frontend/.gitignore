@@ -1,0 +1,6 @@
+# React
+node_modules/
+.env
+.next/
+build/
+coverage/
