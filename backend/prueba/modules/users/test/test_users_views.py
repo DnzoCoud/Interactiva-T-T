@@ -39,3 +39,7 @@ class TestUserView:
         response = authenticated_client.post("/api/v1/users/", data, format="json")
         assert response.status_code == status.HTTP_201_CREATED
         assert response.data["data"]["user"]["username"] == "Danielito3"
+
+    def test_get_by_id_user(self, authenticated_client, create_user):
+        response = authenticated_client.get(f"/api/v1/users/{create_user.id}/")
+        assert response.status_code == status.HTTP_200_OK

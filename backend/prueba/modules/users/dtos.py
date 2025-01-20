@@ -1,4 +1,10 @@
 from pydantic import BaseModel, Field
+from typing import Optional
+
+
+class UserPatchDto(BaseModel):
+    cedula: Optional[str] = None
+    username: Optional[str] = None
 
 
 class UserCreateDto(BaseModel):

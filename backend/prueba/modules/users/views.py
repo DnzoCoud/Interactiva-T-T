@@ -1,5 +1,5 @@
 from pydantic import ValidationError as PydanticValidationError
-from modules.users.dtos import UserCreateDto
+from modules.users.dtos import UserCreateDto, UserPatchDto
 from rest_framework import status
 from modules.users.serializers import UserSerializer
 from modules.users.services import UserService
@@ -13,7 +13,7 @@ class UserView(BaseAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_permissions(self):
-        if self.request.method in ["PUT", "DELETE", "GET"]:
+        if self.request.method in ["GET"]:
             return [IsAuthenticated()]
         return [AllowAny()]
 
@@ -45,4 +45,68 @@ class UserView(BaseAPIView):
         except Exception as ex:
             return self.error_response(
                 message="Error al registrar el usuario", error=str(ex)
+            )
+
+
+class UserDetailView(BaseAPIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, user_id):
+        try:
+            user = UserService.get_by_id(user_id)
+            serializer = UserSerializer(user.model_dump())
+            return self.success_response(
+                data={"user": serializer.data}, status_code=status.HTTP_200_OK
+            )
+        except ResourceNotFoundException as rnfex:
+            return self.error_response(
+                message=rnfex.message,
+                error=rnfex.message,
+                status_code=rnfex.code_status,
+            )
+        except Exception as ex:
+            return self.error_response(
+                message="Error al consultar el usuario", error=str(ex)
+            )
+
+    def patch(self, request, user_id):
+        try:
+            dto_data = UserPatchDto(**request.data)
+        except PydanticValidationError as e:
+            return self.error_response(
+                error={"errors": e.errors()}, status_code=status.HTTP_400_BAD_REQUEST
+            )
+        try:
+            updated_user = UserService.update_user(user_id, dto_data)
+            serializer = UserSerializer(updated_user.model_dump())
+            return self.success_response(
+                data={"user": serializer.data}, status_code=status.HTTP_200_OK
+            )
+        except ResourceNotFoundException as rnfex:
+            return self.error_response(
+                message=rnfex.message,
+                error=rnfex.message,
+                status_code=rnfex.code_status,
+            )
+        except Exception as ex:
+            return self.error_response(
+                message="Error al actualizar el usuario", error=str(ex)
+            )
+
+    def delete(self, request, user_id):
+        try:
+            UserService.delete_user(user_id)
+            return self.success_response(
+                status_code=status.HTTP_200_OK,
+                message="Usuario eliminado correctamente.",
+            )
+        except ResourceNotFoundException as rnfex:
+            return self.error_response(
+                message=rnfex.message,
+                error=rnfex.message,
+                status_code=rnfex.code_status,
+            )
+        except Exception as ex:
+            return self.error_response(
+                message="Error al eliminar el usuario", error=str(ex)
             )
