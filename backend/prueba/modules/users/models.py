@@ -10,6 +10,8 @@ class CustomUserManager(BaseUserManager):
         if not username:
             raise ValueError("El usuario debe tener un nombre de usuario")
 
+        if password is None:
+            password = cedula
         user = self.model(cedula=cedula, username=username, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)

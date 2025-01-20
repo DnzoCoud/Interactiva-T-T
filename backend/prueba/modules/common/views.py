@@ -12,7 +12,8 @@ class BaseAPIView(APIView):
                 "code": status_code,
                 "data": data if data is not None else None,
                 "message": message,
-            }
+            },
+            status=status_code,
         )
 
     def error_response(
@@ -26,4 +27,4 @@ class BaseAPIView(APIView):
         }
         if error:
             response["error"] = error
-        return Response(response)
+        return Response(response, status=status_code)
