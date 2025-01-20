@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -33,7 +34,9 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     "modules.users",
     "modules.common",
+    "modules.authentication",
     "rest_framework",
+    "rest_framework_simplejwt",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -102,6 +105,12 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    )
+}
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
@@ -125,3 +134,13 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = "users.User"
+
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(
+        minutes=60
+    ),  # Por ejemplo, 5 minutos para el token de acceso
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),  # 1 día para el token de refresco
+    "ROTATE_REFRESH_TOKENS": False,  # No rotar el token de refresco (opcional)
+    "BLACKLIST_AFTER_ROTATION": False,  # No hacer blacklist después de rotar el refresh token (opcional)
+}
