@@ -20,3 +20,10 @@ class UserCreateView(APIView):
         if serializer.is_valid():
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class UserListView(APIView):
+    def get(self, request):
+        users = UserService.get_all()
+        serializer = UserSerializer(users, many=True)
+        return Response(serializer.data)
