@@ -5,10 +5,13 @@ from modules.users.serializers import UserSerializer
 from modules.users.services import UserService
 from modules.common.views import BaseAPIView
 from modules.common.exceptions import ResourceNotFoundException
+from rest_framework.permissions import IsAuthenticated
 
 
 # Create your views here.
 class UserView(BaseAPIView):
+    permission_classes = [IsAuthenticated]
+
     def get(self, request):
         users = UserService.get_all()
         serializer = UserSerializer(users, many=True)
