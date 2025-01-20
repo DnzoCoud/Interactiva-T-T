@@ -1,7 +1,6 @@
 from modules.common.views import BaseAPIView
 from rest_framework.permissions import AllowAny
 from modules.authentication.serializers import AuthTokenSerializer
-from rest_framework.exceptions import ValidationError
 from modules.authentication.services import AuthService
 from modules.common.exceptions import UnauthorizeException
 

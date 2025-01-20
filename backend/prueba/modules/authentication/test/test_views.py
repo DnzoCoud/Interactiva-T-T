@@ -18,7 +18,7 @@ class TestAuthToken:
         """Prueba para autenticar al usuario con la cédula y la contraseña."""
         client = APIClient()
         data = {"cedula": "10203040", "password": "10203040"}
-        response = client.post("/api/v1/auth/login", data, format="json")
+        response = client.post("/api/v1/auth/user/login", data, format="json")
 
         assert response.status_code == status.HTTP_200_OK
         assert response.data["code"] == 200
