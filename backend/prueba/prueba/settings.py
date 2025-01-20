@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 from datetime import timedelta
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -35,6 +36,9 @@ INSTALLED_APPS = [
     "modules.users",
     "modules.common",
     "modules.authentication",
+    "modules.events",
+    "modules.event_comments",
+    "modules.event_register",
     "rest_framework",
     "rest_framework_simplejwt",
     "django.contrib.admin",
@@ -144,3 +148,9 @@ SIMPLE_JWT = {
     "ROTATE_REFRESH_TOKENS": False,  # No rotar el token de refresco (opcional)
     "BLACKLIST_AFTER_ROTATION": False,  # No hacer blacklist después de rotar el refresh token (opcional)
 }
+
+# Dirección base para los archivos multimedia
+MEDIA_URL = "/media/"
+
+# Carpeta donde se almacenarán los archivos cargados
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
